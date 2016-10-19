@@ -4,4 +4,10 @@ class Tweet < ActiveRecord::Base
   belongs_to :user
 
   validates :content, :user, presence: true
+
+  def to_builder
+    Jbuilder.new do |tweet|
+      tweet.(self, :content)
+    end
+  end
 end

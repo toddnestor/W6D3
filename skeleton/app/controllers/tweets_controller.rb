@@ -1,6 +1,12 @@
 class TweetsController < ApplicationController
   before_action :require_logged_in!
 
+  def index
+    @tweets = Tweet.includes(:mentioned_users).all
+
+    render :index, formats: :json
+  end
+
   def create
     # simulate latency
     sleep(1)
