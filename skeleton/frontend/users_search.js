@@ -38,9 +38,13 @@ class UsersSearch {
     $(users).each(function(i, user) {
       let li = $('<li>');
       li.append(`<a href="/users/${user.id}">${user.username}</a>`);
-      let followButton = $('<button>').data('user-id',user.id)
-                                      .data('initial-follow-state', user.followed ? 'followed' : 'unfollowed');
-      new FollowToggle(followButton);
+      let followButton = $('<button>');
+
+      new FollowToggle(followButton, {
+        userId: user.id,
+        followState: user.followed ? 'followed' : 'unfollowed'
+      });
+
       li.append(followButton);
       usersUl.append(li);
     });
