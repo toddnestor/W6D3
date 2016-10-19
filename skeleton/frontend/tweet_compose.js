@@ -57,7 +57,8 @@ class TweetCompose {
   handleSuccess(tweet) {
     this.el.find(':input').prop("disabled", false);
     this.clearInput();
-    this.addTweet(tweet);
+    $('#feed').trigger('insert-tweet', [tweet, false]);
+    // this.addTweet(tweet);
   }
 
   addTweet(tweet) {

@@ -250,7 +250,8 @@
 	  handleSuccess(tweet) {
 	    this.el.find(':input').prop("disabled", false);
 	    this.clearInput();
-	    this.addTweet(tweet);
+	    $('#feed').trigger('insert-tweet', [tweet, false]);
+	    // this.addTweet(tweet);
 	  }
 	
 	  addTweet(tweet) {
@@ -287,6 +288,12 @@
 	  constructor($el) {
 	    this.el = $el;
 	    this.el.find('.fetch-more').click(this.fetchTweets.bind(this));
+	    this.el.find('.fetch-more').click();
+	
+	    this.el.on('insert-tweet', (e, tweet, append) => {
+	      this.addTweet(tweet, append);
+	    });
+	
 	    this.maxCreatedAt = null;
 	  }
 	
@@ -304,12 +311,12 @@
 	      data: data,
 	      dataType: 'json',
 	      success: function(tweets) {
-	        if (tweets.length > 0) {
-	          that.maxCreatedAt = tweets[tweets.length - 1].created_at;
-	          that.insertTweets(tweets);
-	        } else {
+	        if (tweets.length < 20) {
 	          $('.fetch-more').remove();
 	          that.el.append($('<h2>').text("No More Tweets!"));
+	        } else {
+	          that.maxCreatedAt = tweets[tweets.length - 1].created_at;
+	          that.insertTweets(tweets);
 	        }
 	      }
 	    });
@@ -317,11 +324,11 @@
 	
 	  insertTweets(tweets) {
 	    $(tweets).each((i, tweet) => {
-	      this.addTweet(tweet);
+	      $('#feed').trigger('insert-tweet', tweet);
 	    });
 	  }
 	
-	  addTweet(tweet) {
+	  addTweet(tweet, append = true) {
 	    let tweetsUl = $(this.el.find('#feed'));
 	    let li = $('<li>');
 	
@@ -339,8 +346,11 @@
 	      li.append(mentionUl);
 	    }
 	
-	
-	    tweetsUl.append(li);
+	    if (append) {
+	      tweetsUl.append(li);
+	    } else {
+	      tweetsUl.prepend(li);
+	    }
 	  }
 	}
 	

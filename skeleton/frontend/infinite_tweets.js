@@ -2,6 +2,12 @@ class InfiniteTweets {
   constructor($el) {
     this.el = $el;
     this.el.find('.fetch-more').click(this.fetchTweets.bind(this));
+    this.el.find('.fetch-more').click();
+
+    this.el.on('insert-tweet', (e, tweet, append) => {
+      this.addTweet(tweet, append);
+    });
+
     this.maxCreatedAt = null;
   }
 
@@ -19,12 +25,12 @@ class InfiniteTweets {
       data: data,
       dataType: 'json',
       success: function(tweets) {
-        if (tweets.length > 0) {
-          that.maxCreatedAt = tweets[tweets.length - 1].created_at;
-          that.insertTweets(tweets);
-        } else {
+        if (tweets.length < 20) {
           $('.fetch-more').remove();
           that.el.append($('<h2>').text("No More Tweets!"));
+        } else {
+          that.maxCreatedAt = tweets[tweets.length - 1].created_at;
+          that.insertTweets(tweets);
         }
       }
     });
@@ -32,11 +38,11 @@ class InfiniteTweets {
 
   insertTweets(tweets) {
     $(tweets).each((i, tweet) => {
-      this.addTweet(tweet);
+      $('#feed').trigger('insert-tweet', tweet);
     });
   }
 
-  addTweet(tweet) {
+  addTweet(tweet, append = true) {
     let tweetsUl = $(this.el.find('#feed'));
     let li = $('<li>');
 
@@ -54,8 +60,11 @@ class InfiniteTweets {
       li.append(mentionUl);
     }
 
-
-    tweetsUl.append(li);
+    if (append) {
+      tweetsUl.append(li);
+    } else {
+      tweetsUl.prepend(li);
+    }
   }
 }
 
