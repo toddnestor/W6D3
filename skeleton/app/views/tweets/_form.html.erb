@@ -8,19 +8,24 @@
   <label>
     Content
     <textarea name="tweet[content]"></textarea>
+    <strong class="chars-left">140</strong>
   </label>
   <br>
 
-  <label>
-    Mention
-    <select name="tweet[mentioned_user_ids][]">
-      <option></option>
-      <% User.all.each do |user| %>
-        <option value="<%= user.id %>"><%= user.username %></option>
-      <% end %>
-    </select>
-  </label>
+  <a href="javascript:void(0)" class="add-mentioned-user">Add mention</a>
+  <div class="mentioned-users"></div>
   <br>
 
   <input type="submit" value="Post Tweet!">
+  <script type="text/template">
+    <div class='mention-user-select'>
+      <select name="tweet[mentioned_user_ids][]">
+        <option></option>
+        <% User.all.each do |user| %>
+        <option value="<%= user.id %>"><%= user.username %></option>
+        <% end %>
+      </select>
+      <a href="javascript:void(0)" class="remove-mention-select">Remove</a>
+    </div>
+  </script>
 </form>

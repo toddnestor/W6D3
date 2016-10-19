@@ -1,13 +1,36 @@
 class TweetCompose {
   constructor($el) {
     this.el = $el;
+    this.charsCount = 0;
     this.el.on("submit", this.handleSubmit.bind(this));
+    this.el.find('[name="tweet[content]"]').keyup(this.handleTyping.bind(this));
+    this.el.find('a.add-mentioned-user').click(this.addMentionedUser.bind(this));
+    this.el.on("click", ".remove-mention-select", this.removeSelect);
   }
 
   handleSubmit(e) {
     e.preventDefault();
 
     this.submit();
+  }
+
+  handleTyping(e) {
+    let value = this.el.find('[name="tweet[content]"]').val();
+    let remaining = 140 - value.length;
+    this.el.find('.chars-left').text(remaining);
+  }
+
+  addMentionedUser(e) {
+    e.preventDefault();
+
+    let $scriptTag = this.el.find('script');
+
+    this.el.find('.mentioned-users').append($scriptTag.html());
+  }
+
+  removeSelect(e) {
+    e.preventDefault();
+    $(this).closest(".mention-user-select").remove();
   }
 
   submit() {
@@ -28,6 +51,7 @@ class TweetCompose {
 
   clearInput() {
     this.el.find(':input:not([type=submit])').val('');
+    this.el.find('.mention-user-select').remove();
   }
 
   handleSuccess(tweet) {
