@@ -2,7 +2,7 @@ class TweetsController < ApplicationController
   before_action :require_logged_in!
 
   def index
-    @tweets = Tweet.includes(:mentioned_users).all
+    @tweets = Tweet.includes(:user,:mentioned_users).all
 
     render :index, formats: :json
   end
