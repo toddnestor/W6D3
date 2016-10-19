@@ -15,7 +15,6 @@ class FollowToggle {
   }
 
   handleClick(e) {
-    console.log('in click');
     e.preventDefault();
 
     switch (this.followState) {
