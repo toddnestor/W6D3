@@ -45,10 +45,15 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	const FollowToggle = __webpack_require__(1);
+	const UsersSearch = __webpack_require__(2);
 	
 	$(() => {
 	  $('.follow-toggle').each((i, el) => {
 	    new FollowToggle($(el));
+	  });
+	
+	  $('.users-search').each((i, el) => {
+	    new UsersSearch($(el));
 	  });
 	});
 
@@ -111,6 +116,62 @@
 	}
 	
 	module.exports = FollowToggle;
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const FollowToggle = __webpack_require__(1);
+	
+	class UsersSearch {
+	  constructor($el) {
+	    this.el = $el;
+	    this.el.find('.search').keyup(this.handleInput.bind(this));
+	  }
+	
+	  handleInput(e) {
+	    let searchValue = this.el.find('.search').val();
+	    this.performSearch(searchValue);
+	  }
+	
+	  performSearch(searchValue) {
+	    let that = this;
+	    if (searchValue.length > 0) {
+	      $.ajax({
+	        url: '/users/search',
+	        type: 'GET',
+	        dataType: 'json',
+	        data: {
+	          query: searchValue
+	        },
+	        success(users) {
+	          that.displayUsers(users);
+	        }
+	      });
+	    } else {
+	      let usersUl = this.el.find('.users');
+	      usersUl.html("");
+	    }
+	
+	  }
+	
+	  displayUsers(users) {
+	    let usersUl = this.el.find('.users');
+	    usersUl.html("");
+	    $(users).each(function(i, user) {
+	      let li = $('<li>');
+	      li.append(`<a href="/users/${user.id}">${user.username}</a>`);
+	      let followButton = $('<button>').data('user-id',user.id)
+	                                      .data('initial-follow-state', user.followed ? 'followed' : 'unfollowed');
+	      new FollowToggle(followButton);
+	      li.append(followButton);
+	      usersUl.append(li);
+	    });
+	  }
+	}
+	
+	module.exports = UsersSearch;
 
 
 /***/ }
