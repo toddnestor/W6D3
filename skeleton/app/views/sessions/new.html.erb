@@ -1,20 +1,16 @@
-<h1>Log in!</h1>
+<div class="session-form">
+  <h1>Sign in to Fake Twitter.</h1>
 
-<form action="/session" method="POST">
-  <input
+  <form action="/session" method="POST">
+    <input
     type="hidden"
     name="authenticity_token"
     value="<%= form_authenticity_token %>">
 
-  <label for="user_username">Username</label>
-  <input type="text" name="user[username]" id="user_username">
-  <br>
+    <input type="text" name="user[username]" id="user_username" placeholder="Username">
 
-  <label for="user_password">Password</label>
-  <input type="password" name="user[password]" id="user_password">
-  <br>
+    <input type="password" name="user[password]" id="user_password" placeholder="Password">
 
-  <input type="submit" value="Log in!">
-</form>
-
-<%= link_to "New User", new_user_url %>
+    <button type="submit">Sign in</button>
+  </form>
+</div>

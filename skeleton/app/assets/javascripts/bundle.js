@@ -155,11 +155,17 @@
 	          query: searchValue
 	        },
 	        success(users) {
-	          that.displayUsers(users);
+	          if (users.length > 0) {
+	            that.displayUsers(users);
+	            that.el.find('.users').show();
+	          } else {
+	            that.el.find('.users').hide();
+	          }
 	        }
 	      });
 	    } else {
 	      let usersUl = this.el.find('.users');
+	      usersUl.hide();
 	      usersUl.html("");
 	    }
 	
@@ -170,15 +176,16 @@
 	    usersUl.html("");
 	    $(users).each(function(i, user) {
 	      let li = $('<li>');
-	      li.append(`<a href="/users/${user.id}">${user.username}</a>`);
+	      let a = $('<a>').attr('href', `/users/${user.id}`).text(user.username);
 	      let followButton = $('<button>');
 	
 	      new FollowToggle(followButton, {
 	        userId: user.id,
 	        followState: user.followed ? 'followed' : 'unfollowed'
 	      });
+	      a.append(followButton);
+	      li.append(a);
 	
-	      li.append(followButton);
 	      usersUl.append(li);
 	    });
 	  }

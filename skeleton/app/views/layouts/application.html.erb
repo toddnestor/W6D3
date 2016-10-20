@@ -8,22 +8,43 @@
 </head>
 <body>
 
-<ul>
-  <li><%= link_to "Feed", feed_url %></li>
-  <li><%= link_to "User Search", search_users_url %></li>
-</ul>
+<% if current_page?('/session/new') || current_page?('/users/new') %>
+  <nav class="sign-up-nav">
+    <ul>
+      <li><%= link_to "Sign up", new_user_url %></li>
+      <li><%= link_to "Sign In", new_session_url %></li>
+    </ul>
+  </nav>
+<% else %>
+  <nav class="main-nav">
+    <ul>
+      <li><%= link_to "Feed", feed_url %></li>
+      <li><%= link_to "User Search", search_users_url %></li>
+      <li>
+        <nav class="users-search">
+          <input type="text" class="search" placeholder="Search Fake Twitter" value="<%= @query %>">
+          <ul class='users'>
+          </ul>
+        </nav>
+      </li>
+      <li>
+        <% if current_user %>
+        <form action="/session" method="POST">
+          <input type="hidden" name="_method" value="DELETE">
+          <input
+          type="hidden"
+          name="authenticity_token"
+          value="<%= form_authenticity_token %>">
 
-<% if current_user %>
-  <form action="/session" method="POST">
-    <input type="hidden" name="_method" value="DELETE">
-    <input
-      type="hidden"
-      name="authenticity_token"
-      value="<%= form_authenticity_token %>">
+          <input type="submit" value="Logout!">
+        </form>
+        <% end %>
+      </li>
+    </ul>
 
-    <input type="submit" value="Logout!">
-  </form>
+  </nav>
 <% end %>
+
 
 <%= yield %>
 
