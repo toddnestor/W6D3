@@ -1,9 +1,14 @@
-<h1>Welcome <%= current_user.username %>!</h1>
+<section class="container cf">
+  <section class="col-1-3">
+    <h1>Welcome <%= current_user.username %>!</h1>
+  </section>
+  <section class="col-2-3">
+    <b>Your Feed!</b>
+    <div class="infinite-tweets">
+      <ul id="feed"></ul>
+      <a href="javascript:void(0)" class="fetch-more">Fetch More!</a>
+    </div>
 
-<b>Your Feed!</b>
-<div class="infinite-tweets">
-  <ul id="feed"></ul>
-  <a href="javascript:void(0)" class="fetch-more">Fetch More!</a>
-</div>
-
-<%= render "tweets/form" %>
+    <%= render "tweets/form" %>
+  </section>
+</section>
