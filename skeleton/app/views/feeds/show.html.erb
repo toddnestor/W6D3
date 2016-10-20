@@ -3,12 +3,11 @@
     <h1>Welcome <%= current_user.username %>!</h1>
   </section>
   <section class="col-2-3">
-    <b>Your Feed!</b>
     <div class="infinite-tweets">
-      <ul id="feed"></ul>
+      <ul id="feed">
+        <li class="new-tweet"><%= render "tweets/form" %></li>
+      </ul>
       <a href="javascript:void(0)" class="fetch-more">Fetch More!</a>
     </div>
-
-    <%= render "tweets/form" %>
   </section>
 </section>
